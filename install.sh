@@ -1,14 +1,14 @@
-#!/bin/bash
-set -euo pipefail
+#!/bin/sh
+# file-receiver installer: builds the Go binary into ~/.local/bin.
+# Go needs no system packages; qrencode is optional, for the QR-code hint.
+set -eu
 
-echo "Installing file receiver dependencies..."
+BINARY="${BINARY:-file-receiver}"
+DEST="${DEST:-$HOME/.local/bin}"
 
-if command -v apt-get >/dev/null 2>&1; then
-    sudo apt-get update -qq || true
-    sudo apt-get install -y -qq gcc make qrencode || true
-fi
+mkdir -p "$DEST"
+go build -trimpath -o "$DEST/$BINARY" .
 
-echo "Dependencies installed: gcc, make, qrencode (optional)."
-echo "To compile:  make -C c_file_receiver"
-echo "To run:      ./c_file_receiver/server (or with sudo for port <1024)"
-echo "QR Code:     after install, run 'qrencode -t ANSIUTF8 \"http://YOUR_IP:8080\"'"
+echo "Installed: $DEST/$BINARY"
+echo "Run:       $DEST/$BINARY --help"
+echo "Optional:  install qrencode to print a QR code of the upload URL."

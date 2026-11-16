@@ -1,16 +1,27 @@
-BINARY = file-receiver
+BINARY  ?= file-receiver
+GO      ?= go
 
-all:
-	go build -o $(BINARY) .
+.PHONY: all build test vet race install run clean
 
-install:
-	mkdir -p $(HOME)/.local/bin
-	go build -o $(HOME)/.local/bin/$(BINARY) .
+all: vet race build
+
+build:
+	$(GO) build -trimpath -o $(BINARY) .
+
+test:
+	$(GO) test ./...
+
+race:
+	$(GO) test -race ./...
+
+vet:
+	$(GO) vet ./...
+
+install: build
+	install -m 0755 $(BINARY) $(HOME)/.local/bin/$(BINARY)
 
 run:
-	go run .
+	$(GO) run .
 
 clean:
-	rm -f server $(BINARY)
-
-.PHONY: all install run clean
+	rm -f $(BINARY)

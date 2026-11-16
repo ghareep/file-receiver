@@ -1,16 +1,8 @@
 # Build artifacts
-server
-*.o
-
-# Old deprecated files
-server.c
-server.py
-
-# User uploads (do not commit)
-~/Downloads/mobile_uploads/
-mobile_uploads/
-
-# Logs / temp
+file-receiver
 *.log
 nohup.out
 *.swp
+
+# User uploads (never commit)
+mobile_uploads/
